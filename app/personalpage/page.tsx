@@ -3,56 +3,45 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClipboardQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons'; // 使用正确的图标库
 
-// Header Component
 const Header = ({ 
-  title,
-  showBackButton,
-  onBack 
+    title,
+    showBackButton,
+    onBack 
 }: { 
-  title: string,
-  showBackButton?: boolean,
-  onBack?: () => void 
+    title: string,
+    showBackButton?: boolean,
+    onBack?: () => void 
 }) => {
-  return (
-    <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-10">
-      {/* Status Bar */}
-      <div className="max-w-screen-md mx-auto px-4 py-2">
-        <div className="flex justify-between items-center">
-          <span className="text-sm">9:41</span>
-          <div className="flex items-center gap-1">
-            <div className="h-4">
-              {/* Signal icons */}
+    return (
+        <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-10">
+            <div className="max-w-screen-md mx-auto px-4 h-16 flex items-center">
+                {showBackButton && (
+                    <button 
+                        onClick={onBack}
+                        className="text-gray-600 mr-2"
+                    >
+                        ←
+                    </button>
+                )}
+                <div className="flex items-center gap-2">
+                    <div className="relative w-11 h-12">
+                        <Image
+                            src="/sample-tasks/document.png"
+                            alt="Coin Icon"
+                            fill
+                            style={{ objectFit: 'contain' }}
+                            priority
+                        />
+                    </div>
+                    <span className="text-lg text-black">{title}</span>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Title Bar - 调整高度使其与 homepage 一致 */}
-      <div className="max-w-screen-md mx-auto px-4 h-16 flex items-center">
-        {showBackButton && (
-          <button 
-            onClick={onBack}
-            className="text-gray-600 mr-2"
-          >
-            ←
-          </button>
-        )}
-        <div className="flex items-center gap-2">
-          <div className="relative w-8 h-8">
-            <Image
-              src="/sample-tasks/document.png"
-              alt="Coin Icon"
-              fill
-              style={{ objectFit: 'contain' }}
-              priority
-            />
-          </div>
-          <span className="text-lg text-black">{title}</span>
-        </div>
-      </div>
-    </header>
-  );
+        </header>
+    );
 };
 
 const PersonalPage = () => {
@@ -61,6 +50,19 @@ const PersonalPage = () => {
   const [selectedCrypto, setSelectedCrypto] = useState('');
   const [inputValue, setInputValue] = useState('');
 
+  const getCryptoName = (crypto: string) => {
+    switch(crypto) {
+      case 'bitcoin':
+        return 'ビットコイン';
+      case 'ethereum':
+        return 'イーサリアム';
+      case 'mercoin':
+        return 'メルコイン';
+      default:
+        return '';
+    }
+  };
+
   const handleExchange = () => {
     setShowSuccessModal(true);
   };
@@ -68,7 +70,7 @@ const PersonalPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
-        title={selectedCrypto ? 'イーサリアムに交換する' : 'coinを交換する！'}
+        title={selectedCrypto ? `${getCryptoName(selectedCrypto)}に交換する` : 'coinを交換する！'}
         showBackButton={!!selectedCrypto}
         onBack={() => setSelectedCrypto('')}
       />
@@ -76,13 +78,12 @@ const PersonalPage = () => {
       <main className="max-w-screen-md mx-auto px-4 pt-28 pb-24">
         {!selectedCrypto ? (
           <>
-            {/* Coin Card */}
             <div className="mb-6">
               <div className="bg-gradient-to-br from-orange-400 to-orange-300 rounded-xl p-6 relative overflow-hidden">
                 <div className="absolute top-2 right-2">
-                  <div className="relative w-8 h-8">
+                  <div className="relative w-20 h-20">
                     <Image
-                      src="/sample-tasks/document.png"
+                      src="/logoo.png"
                       alt="Small Coin"
                       fill
                       style={{ objectFit: 'contain' }}
@@ -99,7 +100,6 @@ const PersonalPage = () => {
               </div>
             </div>
 
-            {/* Exchange Options */}
             <div className="space-y-3">
               <button 
                 onClick={() => setSelectedCrypto('bitcoin')}
@@ -117,7 +117,14 @@ const PersonalPage = () => {
                 className="w-full bg-white rounded-xl p-4 flex items-center justify-between shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-gray-600 text-2xl">Ξ</span>
+                <div className="relative w-6 h-6">
+                    <Image
+                        src="/Ethereum-icon-purple.png"
+                        alt="Ethereum Icon"
+                        layout="fill"
+                        objectFit="contain"
+                    />
+                    </div>
                   <span className="text-gray-700">イーサリアムに交換する</span>
                 </div>
                 <span className="text-gray-400">→</span>
@@ -128,7 +135,14 @@ const PersonalPage = () => {
                 className="w-full bg-white rounded-xl p-4 flex items-center justify-between shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-red-500 text-2xl">M</span>
+                  <div className="relative w-6 h-6">
+                    <Image
+                      src="/mercoin_logo_bk.png"
+                      alt="Mercoin Icon"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
                   <span className="text-gray-700">メルコインに交換する</span>
                 </div>
                 <span className="text-gray-400">→</span>
@@ -137,24 +151,21 @@ const PersonalPage = () => {
           </>
         ) : (
           <>
-            {/* Current Coin Balance */}
             <div className="flex items-center gap-2 mb-6">
               <span className="text-orange-400">©</span>
               <span className="text-orange-400">1234 coin</span>
             </div>
 
-            {/* Exchange Input */}
             <div className="mb-6">
               <input
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="120"
-                className="w-full p-4 border border-gray-200 rounded-xl text-lg"
+                className="w-full p-4 border border-gray-200 rounded-xl text-lg text-black"
               />
             </div>
 
-            {/* Exchange Button */}
             <button
               onClick={handleExchange}
               className={`w-full py-4 rounded-xl text-white ${
@@ -167,7 +178,6 @@ const PersonalPage = () => {
         )}
       </main>
 
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
@@ -183,8 +193,9 @@ const PersonalPage = () => {
               </div>
               <h3 className="text-2xl font-bold mb-2">交換しました</h3>
               <p className="text-gray-600 mb-6">
-                イーサリアムに交換しました。今すぐ、<br />
-                chainで確認しましょう！
+                {getCryptoName(selectedCrypto)}に変更しました。さらに、<br />
+                chocoWORKで<br />
+                ちょこっとワークしよう!
               </p>
               <button
                 onClick={() => {
@@ -200,21 +211,16 @@ const PersonalPage = () => {
         </div>
       )}
 
-      {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-screen-md mx-auto px-4 h-16 flex items-center justify-around">
           <Link href="/homepage">
             <button className="text-gray-400 p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
-              </svg>
+            <FontAwesomeIcon icon={faClipboardQuestion} className="h-6 w-6" />
             </button>
           </Link>
           <Link href="/exchange">
             <button className="text-orange-500 p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-              </svg>
+            <FontAwesomeIcon icon={faMoneyBillTransfer} className="h-6 w-6" />
             </button>
           </Link>
         </div>
