@@ -1,5 +1,8 @@
+// homepage/page.tsx
+'use client';
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface SurveyCard {
   id: number;
@@ -9,10 +12,28 @@ interface SurveyCard {
   duration: number;
 }
 
-const SurveyCard = ({ title, date, coins, duration }: SurveyCard) => {
+const SurveyCard = ({ id, title, date, coins, duration }: SurveyCard) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/survey/${id}`);
+  };
+
+  const handleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 防止触发卡片的点击事件
+    // 处理收藏逻辑
+    console.log('Favorite clicked for survey:', id);
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 relative transition-all duration-200 hover:shadow-md">
-      <button className="absolute top-3 right-3 text-gray-300 hover:text-red-400 transition-colors">
+    <div 
+      onClick={handleClick}
+      className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 relative transition-all duration-200 hover:shadow-md cursor-pointer"
+    >
+      <button 
+        onClick={handleFavorite}
+        className="absolute top-3 right-3 text-gray-300 hover:text-red-400 transition-colors"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
@@ -51,32 +72,44 @@ const SurveyCard = ({ title, date, coins, duration }: SurveyCard) => {
 };
 
 const surveyTitles = [
-    "SNSについてのアンケート",
-    "オンラインショッピングの利用実態調査",
-    "食生活に関する意識調査",
-    "働き方の満足度調査",
-    "デジタルサービスの使用頻度調査",
-    "ライフスタイルに関する調査",
-    "通勤・通学に関するアンケート",
-    "趣味や娯楽に関する調査",
-    "環境問題への意識調査",
-    "健康管理に関するアンケート"
-  ];
+  "SNSについてのアンケート",
+  "オンラインショッピングの利用実態調査",
+  "食生活に関する意識調査",
+  "働き方の満足度調査",
+  "デジタルサービスの使用頻度調査",
+  "ライフスタイルに関する調査",
+  "通勤・通学に関するアンケート",
+  "趣味や娯楽に関する調査",
+  "環境問題への意識調査",
+  "健康管理に関するアンケート"
+];
+
+const HomePage = () => {
+  const router = useRouter();
   
-  const HomePage = () => {
-    const surveys: SurveyCard[] = Array(12).fill(null).map((_, index) => {
-      const today = new Date();
-      const futureDate = new Date(today);
-      futureDate.setDate(today.getDate() + Math.floor(Math.random() * 14)); // 随机生成未来14天内的日期
-      
-      return {
-        id: index + 1,
-        title: surveyTitles[Math.floor(Math.random() * surveyTitles.length)],
-        date: `${futureDate.getFullYear()}.${String(futureDate.getMonth() + 1).padStart(2, '0')}.${String(futureDate.getDate()).padStart(2, '0')}`,
-        coins: Math.floor(Math.random() * 45) + 5, // 5-50 coins
-        duration: Math.floor(Math.random() * 15) + 1, // 1-15 minutes
-      };
-    });
+  const surveys: SurveyCard[] = Array(12).fill(null).map((_, index) => {
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + Math.floor(Math.random() * 14));
+    
+    return {
+      id: index + 1,
+      title: surveyTitles[Math.floor(Math.random() * surveyTitles.length)],
+      date: `${futureDate.getFullYear()}.${String(futureDate.getMonth() + 1).padStart(2, '0')}.${String(futureDate.getDate()).padStart(2, '0')}`,
+      coins: Math.floor(Math.random() * 45) + 5,
+      duration: Math.floor(Math.random() * 15) + 1,
+    };
+  });
+
+  const handleSearch = () => {
+    console.log('Search clicked');
+    // 实现搜索功能
+  };
+
+  const handleFavorites = () => {
+    console.log('Favorites clicked');
+    // 实现收藏夹功能
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -93,12 +126,18 @@ const surveyTitles = [
             />
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-gray-400 hover:text-gray-600 transition-colors p-2">
+            <button 
+              onClick={handleFavorites}
+              className="text-gray-400 hover:text-gray-600 transition-colors p-2"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </button>
-            <button className="text-gray-400 hover:text-gray-600 transition-colors p-2">
+            <button 
+              onClick={handleSearch}
+              className="text-gray-400 hover:text-gray-600 transition-colors p-2"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -110,8 +149,8 @@ const surveyTitles = [
       {/* Main Content */}
       <main className="max-w-screen-md mx-auto px-4 pt-24 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {surveys.map((survey, index) => (
-            <SurveyCard key={index} {...survey} />
+          {surveys.map((survey) => (
+            <SurveyCard key={survey.id} {...survey} />
           ))}
         </div>
       </main>
