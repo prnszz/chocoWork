@@ -19,7 +19,9 @@
 
 
 import LoginFlow from '@/components/LoginFlow';
+import Wallet from '@/components/Wallet';
 
 export default function Home() {
-  return <LoginFlow />;
+  // return <LoginFlow />;
+  return <Wallet />;
 }
