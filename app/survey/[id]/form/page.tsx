@@ -39,7 +39,7 @@ const SurveyFormPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="ml-4 text-gray-800 font-medium">SNSについてのアンケート</h1>
+          {/* <h1 className="ml-4 text-gray-800 font-medium">SNSについてのアンケート</h1> */}
         </div>
       </header>
 

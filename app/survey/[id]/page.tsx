@@ -1,6 +1,6 @@
 // survey/[id]/page.tsx
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -10,20 +10,36 @@ interface DetailProps {
   };
 }
 
+interface Survey {
+  id: number;
+  title: string;
+  company: string;
+  deadline: string;
+  coins: number;
+  content: string;
+  duration: number;
+}
+
 const SurveyDetailPage = ({ params }: DetailProps) => {
   const router = useRouter();
-  
-  // 这些数据实际应该从API获取
-  const surveyData = {
-    id: params.id,
-    title: "SNSについてのアンケート",
-    company: "株式会社 Takino",
-    deadline: "2024.12.5",
-    coins: 16,
-    content: `あなたがよく使用するSNSについて、お聞きさせていただきます！内容としては、よく使用するSNSとそれを使用する使用する理由についてお聞きいたします。時間は大体2分ほどで完了いたします。
+  const [survey, setSurvey] = useState<Survey | null>(null);
 
-アンケートの回答お待ちしております。`
-  };
+  useEffect(() => {
+    const fetchSurvey = async () => {
+      try {
+        const res = await fetch(`/api/surveys/${params.id}`);
+        const data = await res.json();
+        setSurvey(data);
+      } catch (error) {
+        console.error('Error fetching survey:', error);
+      }
+    };
+
+    fetchSurvey();
+  }, [params.id]);
+
+  if (!survey) return <div>Loading...</div>;
+  const formattedDeadline = new Date(survey.deadline).toLocaleDateString();
 
   const handleStart = () => {
     router.push(`/survey/${params.id}/form`);
@@ -78,10 +94,10 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
           <div className="p-4 space-y-6">
             {/* Title and Company */}
             <div className="space-y-2">
-              <h1 className="text-xl font-medium text-gray-900">{surveyData.title}</h1>
+              <h1 className="text-xl font-medium text-gray-900">{survey.title}</h1>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 bg-red-500 rounded-full" />
-                <span className="text-sm text-gray-600">{surveyData.company}</span>
+                <span className="text-sm text-gray-600">{survey.company}</span>
               </div>
             </div>
 
@@ -89,7 +105,7 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="text-orange-500">🪙</span>
-                <span className="text-xl font-semibold text-gray-900">{surveyData.coins}<span className="text-sm font-normal text-gray-500 ml-0.5">coin</span></span>
+                <span className="text-xl font-semibold text-gray-900">{survey.coins}<span className="text-sm font-normal text-gray-500 ml-0.5">coin</span></span>
               </div>
               <div className="bg-orange-50 text-orange-500 px-3 py-1 rounded-full text-sm">
                 約2分
@@ -99,13 +115,13 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
             {/* Deadline */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-500">期限:</span>
-              <span className="text-sm font-medium text-gray-700">{surveyData.deadline}</span>
+              <span className="text-sm font-medium text-gray-700">{formattedDeadline}</span>
             </div>
 
             {/* Content */}
             <div className="space-y-2">
-              <h2 className="font-medium text-gray-900">内容</h2>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">{surveyData.content}</p>
+              <h2 className="font-medium text-gray-900">詳細</h2>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap">{survey.content}</p>
             </div>
           </div>
         </div>
