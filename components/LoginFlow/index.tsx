@@ -1,3 +1,4 @@
+// components/LoginFlow/index.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -17,7 +18,7 @@ const LoginFlow = () => {
     try {
       setIsLoading(true);
       const result = await signIn("worldid", {
-        callbackUrl: "/",
+        callbackUrl: "https://choco-work.vercel.app/homepage",
         redirect: false,
       });
       
