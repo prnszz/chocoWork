@@ -87,23 +87,23 @@ const SurveyCard = ({ id, title, deadline, coins, duration }: Survey) => {
         </h3>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 bg-gray-100 px-1 py-0.5 rounded-full">
             <span className="text-[10px] text-gray-500">期限:</span>
             <span className="text-xs font-medium text-gray-700">{formattedDeadline}</span>
           </div>
-            <span className="bg-orange-50 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-small">
+            <span className=" text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-small">
             NEW!
             </span>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-1 bg-gray-50 px-2 py-1 rounded-full">
-            <span className="text-xs text-gray-600">約</span>
-            <span className="text-xs font-medium text-gray-700">{duration}</span>
-            <span className="text-xs text-gray-600">分</span>
+          <div className="flex items-center space-x-1 bg-orange-50 px-2 py-1 rounded-full">
+            <span className="text-xs text-orange-500">約</span>
+            <span className="text-xs font-medium text-orange-500">{duration}</span>
+            <span className="text-xs text-orange-500">分</span>
           </div>
           <div className="flex items-center space-x-1">
-            <span className="text-orange-500">🪙</span>
+            <span className="text-orange-500">©</span>
             <span className="text-sm font-semibold text-gray-700">
               {coins}
               <span className="text-xs font-normal text-gray-500 ml-0.5">coin</span>
