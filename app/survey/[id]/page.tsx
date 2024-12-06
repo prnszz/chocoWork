@@ -101,7 +101,8 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
                 <Image
                   src={survey.icon}
                   alt="icon"
-                  fill
+                  width={26}
+                  height={26}
                 />
                 <span className="text-sm text-gray-600">{survey.company}</span>
               </div>
