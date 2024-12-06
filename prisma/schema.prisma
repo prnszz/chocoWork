@@ -28,6 +28,7 @@ model Survey {
   answers     Answer[]
   favorites   Favorite[]
   isActive    Boolean  @default(true)
+  icon        String
 }
 
 model Answer {

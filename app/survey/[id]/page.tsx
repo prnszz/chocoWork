@@ -18,6 +18,7 @@ interface Survey {
   coins: number;
   description: string;
   duration: number;
+  icon: string;
 }
 
 const SurveyDetailPage = ({ params }: DetailProps) => {
@@ -96,7 +97,12 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
             <div className="space-y-2">
               <h1 className="text-xl font-medium text-gray-900">{survey.title}</h1>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-red-500 rounded-full" />
+                {/* <div className="w-6 h-6 bg-red-500 rounded-full" /> */}
+                <Image
+                  src={survey.icon}
+                  alt="icon"
+                  fill
+                />
                 <span className="text-sm text-gray-600">{survey.company}</span>
               </div>
             </div>
