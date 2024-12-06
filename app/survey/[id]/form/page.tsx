@@ -1,11 +1,17 @@
-// survey/[id]/form/page.tsx
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+interface Survey {
+  id: string;
+  coins: number;
+  // add other survey fields as needed
+}
+
 const SurveyFormPage = () => {
   const router = useRouter();
+  const [surveyData, setSurveyData] = useState<Survey | null>(null);
   const [formData, setFormData] = useState({
     age: '',
     gender: '',
@@ -13,6 +19,22 @@ const SurveyFormPage = () => {
     comments: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    fetchSurveyData();
+  }, []);
+
+  const fetchSurveyData = async () => {
+    try {
+      // Assuming you're getting the survey ID from the URL
+      const surveyId = window.location.pathname.split('/')[2];
+      const res = await fetch(`/api/surveys/${surveyId}`);
+      const data = await res.json();
+      setSurveyData(data);
+    } catch (error) {
+      console.error('Error fetching survey:', error);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -39,7 +61,6 @@ const SurveyFormPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          {/* <h1 className="ml-4 text-gray-800 font-medium">SNSについてのアンケート</h1> */}
         </div>
       </header>
 
@@ -48,6 +69,7 @@ const SurveyFormPage = () => {
         {!isSubmitted ? (
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 space-y-6">
+              {/* Form fields remain the same */}
               <div className="space-y-2">
                 <label className="block text-sm text-gray-700">年代</label>
                 <select 
@@ -110,18 +132,26 @@ const SurveyFormPage = () => {
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-xl p-8 text-center space-y-6">
+          <div className="bg-white rounded-xl p-8 text-center space-y-0">
+            <div className="relative w-32 h-32 mx-auto" style={{ marginBottom: '-8px' }}>
+              <Image
+                src="/Congratulations.png"
+                alt="New Image"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
             <div className="relative w-32 h-32 mx-auto">
               <Image
-                src="/completion-illustration.png"
+                src="/talk_people.png"
                 alt="Completion"
                 fill
                 style={{ objectFit: 'contain' }}
               />
             </div>
-            <div className="space-y-2">
-              <h2 className="text-xl font-medium text-gray-800">ありがとうございました！</h2>
-              <p className="text-sm text-gray-500">16コインを獲得しました</p>
+            <div className="space-y-4">
+              <h2 className="text-xl font-medium text-gray-800" style={{ marginTop: '16px' }}>ありがとうございました！</h2>
+              <p className="text-sm text-gray-500">{surveyData?.coins}コインを獲得しました</p>
             </div>
             <button
               onClick={() => router.push('/homepage')}

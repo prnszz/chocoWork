@@ -19,74 +19,100 @@ interface Survey {
 }
 
 const SurveyCard = ({ id, title, deadline, coins, duration }: Survey) => {
- const router = useRouter();
- const [isFavorited, setIsFavorited] = useState(false);
+  const router = useRouter();
+  const [isFavorited, setIsFavorited] = useState(false);
 
- const handleClick = () => {
-   router.push(`/survey/${id}`);
- };
+  const handleClick = () => {
+    router.push(`/survey/${id}`);
+  };
 
- const handleFavorite = async (e: React.MouseEvent) => {
-   e.stopPropagation();
-   try {
-     const res = await fetch(`/api/surveys/${id}/favorite`, {
-       method: isFavorited ? 'DELETE' : 'POST',
-     });
-     if (res.ok) {
-       setIsFavorited(!isFavorited);
-     }
-   } catch (error) {
-     console.error('Error toggling favorite:', error);
-   }
- };
+  const handleFavorite = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const res = await fetch(`/api/surveys/${id}/favorite`, {
+        method: isFavorited ? 'DELETE' : 'POST',
+      });
+      if (res.ok) {
+        setIsFavorited(!isFavorited);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
 
- const formattedDeadline = new Date(deadline).toLocaleDateString();
+  const formattedDeadline = new Date(deadline).toLocaleDateString();
 
+  return (
+    <div 
+      onClick={handleClick}
+      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer"
+    >
+      {/* Image Section */}
+      <div className="relative w-full aspect-[5/3] bg-gradient-to-br from-gray-50 to-gray-100">
+        {/* 可以在这里添加图片 */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-2xl">✏️</span>
+        </div>
+        
+        {/* Favorite Button */}
+        <button 
+          onClick={handleFavorite}
+          className="absolute top-2 right-2"
+        >
+          <div className={`w-8 h-8 flex items-center justify-center rounded-full ${
+            isFavorited ? 'bg-orange-500' : 'bg-white/80'
+          }`}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-5 w-5" 
+              fill={isFavorited ? 'white' : 'none'}
+              viewBox="0 0 24 24" 
+              stroke={isFavorited ? 'white' : 'gray'}
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={1.5} 
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
 
- return (
-   <div 
-     onClick={handleClick}
-     className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 relative transition-all duration-200 hover:shadow-md cursor-pointer"
-   >
-     <button 
-       onClick={handleFavorite}
-       className={`absolute top-3 right-3 transition-colors ${isFavorited ? 'text-red-400' : 'text-gray-300'}`}  
-     >
-       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-       </svg>
-     </button>
-     
-     <div className="space-y-3">
-       <div className="flex items-start gap-3">
-         <div className="w-10 h-10 flex-shrink-0">
-           <div className="w-full h-full bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg flex items-center justify-center">
-             <span className="text-lg">✏️</span>
-           </div>
-         </div>
-         <div className="flex-1 min-w-0">
-           <h3 className="font-medium text-gray-800 text-sm leading-5 line-clamp-2">{title}</h3>
-         </div>
-       </div>
-       
-       <div className="flex items-center justify-between">
-         <div className="flex items-center gap-2">
-           <span className="text-xs text-gray-500">期限:</span>
-           <span className="text-xs font-medium text-gray-700">{formattedDeadline}</span>
-         </div>
-         <span className="bg-gradient-to-r from-orange-50 to-orange-100 text-orange-500 px-2 py-1 rounded-full text-xs font-medium">NEW!</span>
-       </div>
-       
-       <div className="flex items-center justify-between pt-1">
-         <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">約{duration}分</span>
-         <div className="flex items-center gap-1.5">
-           <span className="text-orange-500">🪙</span>
-           <span className="text-sm font-semibold text-gray-700">{coins}<span className="text-xs font-normal text-gray-500 ml-0.5">coin</span></span>
-         </div>
-       </div>
-     </div>
-   </div>
- );
+      {/* Content Section */}
+      <div className="p-3 space-y-2">
+        <h3 className="font-medium text-gray-800 text-sm leading-5 line-clamp-2">
+          {title}
+        </h3>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-1">
+            <span className="text-[10px] text-gray-500">期限:</span>
+            <span className="text-xs font-medium text-gray-700">{formattedDeadline}</span>
+          </div>
+            <span className="bg-orange-50 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-small">
+            NEW!
+            </span>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-1 bg-gray-50 px-2 py-1 rounded-full">
+            <span className="text-xs text-gray-600">約</span>
+            <span className="text-xs font-medium text-gray-700">{duration}</span>
+            <span className="text-xs text-gray-600">分</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span className="text-orange-500">🪙</span>
+            <span className="text-sm font-semibold text-gray-700">
+              {coins}
+              <span className="text-xs font-normal text-gray-500 ml-0.5">coin</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const HomePage = () => {
@@ -133,7 +159,7 @@ const HomePage = () => {
              priority
            />
          </div>
-         <div className="flex items-center gap-3">
+         <div className="flex items-center gap-2">
            <button 
              onClick={handleFavorites}
              className="text-gray-400 hover:text-gray-600 transition-colors p-2"
@@ -155,7 +181,7 @@ const HomePage = () => {
      </header>
 
      <main className="max-w-screen-md mx-auto px-4 pt-24 pb-24">
-       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2">
          {surveys.map((survey) => (
            <SurveyCard key={survey.id} {...survey} />
          ))}

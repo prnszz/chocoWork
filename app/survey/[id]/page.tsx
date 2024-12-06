@@ -16,7 +16,7 @@ interface Survey {
   company: string;
   deadline: string;
   coins: number;
-  content: string;
+  description: string;
   duration: number;
 }
 
@@ -121,7 +121,7 @@ const SurveyDetailPage = ({ params }: DetailProps) => {
             {/* Content */}
             <div className="space-y-2">
               <h2 className="font-medium text-gray-900">詳細</h2>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">{survey.content}</p>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap">{survey.description}</p>
             </div>
           </div>
         </div>
